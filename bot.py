@@ -144,9 +144,21 @@ def main():
         backoff = min(backoff * 2, max_backoff)
         logger.info("Restarting bot now...")
 
+import threading
+from http.server import SimpleHTTPRequestHandler, HTTPServer
+
+def start_http_server():
+    port = int(os.environ.get("PORT", "8000"))
+    server = HTTPServer(("0.0.0.0", port), SimpleHTTPRequestHandler)
+    server.serve_forever()
+
+# Jalankan server kecil di thread terpisah
+threading.Thread(target=start_http_server, daemon=True).start()
+
 
 if __name__ == "__main__":
     main()
+
 
 
 
