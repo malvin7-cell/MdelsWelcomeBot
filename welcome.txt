@@ -1,0 +1,8 @@
+👋 Selamat datang, {first_name}!
+
+Terima kasih sudah bergabung di {chat_title} 💕
+Di sini kamu bisa menemukan berbagai macam barang menarik dengan harga bersahabat.
+
+🛒 Silakan mau beli, atau cuma lihat-lihat dulu — semua boleh 😊
+
+Happy shopping! 🛍️
