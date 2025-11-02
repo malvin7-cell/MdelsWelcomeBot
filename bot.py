@@ -128,11 +128,11 @@ def main():
             logger.info("Starting Telegram bot...")
             app = ApplicationBuilder().token(TOKEN).build()
 
-            # Tambahkan handler
+            # Tambahkan handler kamu di sini
             app.add_handler(MessageHandler(filters.StatusUpdate.NEW_CHAT_MEMBERS, welcome_new_members))
             app.add_error_handler(error_handler)
 
-            # Jalankan polling
+            # Jalankan polling (stop_signals=None agar tidak berhenti otomatis)
             app.run_polling(stop_signals=None)
             logger.warning("run_polling() returned — restarting bot automatically...")
         except Exception as e:
@@ -147,5 +147,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
