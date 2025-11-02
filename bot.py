@@ -114,5 +114,38 @@ def main():
             # loop continues and rebuild app
             logger.info("Restarting bot now...")
 
+# ----- Main with auto-restart logic -----
+def main():
+    if not TOKEN:
+        raise RuntimeError("TELEGRAM_TOKEN belum di-set di .env / environment variables")
+
+    # Ambil nilai backoff dari environment (bisa diatur di Render)
+    backoff = int(os.getenv("BACKOFF_INITIAL", 5))       # default 5 detik
+    max_backoff = int(os.getenv("BACKOFF_MAX", 300))     # default 5 menit
+
+    while True:
+        try:
+            logger.info("Starting Telegram bot...")
+            app = ApplicationBuilder().token(TOKEN).build()
+
+            # Tambahkan handler
+            app.add_handler(MessageHandler(filters.StatusUpdate.NEW_CHAT_MEMBERS, welcome_new_members))
+            app.add_error_handler(error_handler)
+
+            # Jalankan polling
+            app.run_polling(stop_signals=None)
+            logger.warning("run_polling() returned — restarting bot automatically...")
+        except Exception as e:
+            logger.exception("Bot crashed with exception: %s", e)
+
+        # Delay sebelum restart (backoff)
+        logger.info(f"Bot will restart in {backoff} seconds...")
+        time.sleep(backoff)
+        backoff = min(backoff * 2, max_backoff)
+        logger.info("Restarting bot now...")
+
+
 if __name__ == "__main__":
     main()
+
+
